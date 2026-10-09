@@ -2,7 +2,7 @@
 **Course:** Exploratory Data Analysis (EDA) Case Study  
 **Author:** Senior Data Analyst & Research Maintainer  
 **Repository:** [https://github.com/aarkie24/F1-case-study](https://github.com/aarkie24/F1-case-study)  
-**Status:** Completed & Fully Reproducible  
+**Status:** Completed & Validated  
 
 ---
 
@@ -14,7 +14,7 @@ This project delivers a multi-tiered Exploratory Data Analysis (EDA) investigati
 
 The analysis strictly distinguishes between:
 1. **Direct Empirical Facts:** Turnstile attendance counts, contractual hosting fee terms, official ticket tariffs, and circuit capex.
-2. **Statistical Inferences:** Distributional moments, non-parametric regional differences, Spearman rank correlations, and multivariate regression models.
+2. **Statistical Inferences & Associations:** Distributional moments, non-parametric continental comparisons, Spearman rank correlations, and multivariate regression models.
 3. **Documentary Context:** High Court tax escrow mandates, Customs Department classifications, promoter corporate debt disclosures, and the post-exit 2017 Supreme Court Permanent Establishment (PE) ruling.
 
 ---
@@ -23,11 +23,11 @@ The analysis strictly distinguishes between:
 
 | Research Question | Empirical Focus | Baseline Benchmark | Rubric Mapping |
 |---|---|---|---|
-| **Primary RQ** | Commercial feasibility of F1 events & BIC sustainability | Global F1 2010–2019 baseline | **Problem Framing (2 Marks)** |
+| **Primary RQ** | Commercial feasibility of F1 events & BIC sustainability | Global F1 2010–2019 baseline ($N=198$) | **Problem Framing (2 Marks)** |
 | **RQ1 (Attendance Trajectory)** | Gate turnout decay across 2011, 2012, 2013 editions | Sunday vs 3-day weekend turnstiles | **Data Cleaning & Provenance (2 Marks)** |
 | **RQ2 (Comparative Positioning)** | Continental & global benchmarking | Percentiles across 198 races; Kruskal-Wallis tests | **Statistical Depth (2 Marks)** |
-| **RQ3 (Attendance Drivers)** | Correlates of race attendance | Host GDP per capita, tenure, speed, distance | **Statistical Depth & Modeling (2 Marks)** |
-| **RQ4 (Commercial Feasibility)** | Hosting fee escalation & currency depreciation | Gate revenue vs operating expense models | **Insightful Interpretation (2 Marks)** |
+| **RQ3 (Attendance Drivers)** | Statistical correlates of race attendance | Host GDP per capita, tenure, speed, distance | **Statistical Depth & Modeling (2 Marks)** |
+| **RQ4 (Commercial Feasibility)** | Hosting fee escalation & currency depreciation | Multi-scenario financial modeling (Low, Central, High) | **Insightful Interpretation (2 Marks)** |
 | **RQ5 (Circuit Dynamics)** | Track speed, length, and competition metrics | Baseline circuit speed rankings | **Visualization Sophistication (2 Marks)** |
 | **RQ6 (Documentary Integration)** | Customs, tax disputes & 2017 SC PE ruling | Chronological source registry | **Insightful Interpretation (2 Marks)** |
 
@@ -69,18 +69,18 @@ The project implements a 3-tier data architecture to prevent synthetic corruptio
 ```
 
 ### 3.1. Sourcing Provenance
-- `SRC_01`: Jolpica F1 API (Ergast DB successor) — Sporting records, margins, speeds, pit stops.
+- `SRC_01`: Jolpica F1 API (Ergast DB successor) — Sporting records, margins, speeds, pit stops across 198 races (2010–2019).
 - `SRC_02`: Formula One Management (FOM) Annual Reports — Official global attendance figures.
 - `SRC_03`: RaceFans Motorsport Database — Independent weekend attendance archives.
 - `SRC_04`: World Bank Development Indicators — Annual GDP per capita (`NY.GDP.PCAP.CD`).
-- `SRC_05`: Jaypee Sports International (JPSI) Disclosures & Autosport — Indian GP gate turnouts.
-- `SRC_06`: Forbes / Formula Money (Christian Sylt) — Contractual hosting fees and escalation terms.
-- `SRC_07`: BookMyShow — Official tiered ticketing rate cards.
-- `SRC_08`: Jaiprakash Associates Ltd (JAL) — Statutory corporate disclosures & circuit capex (~$400M).
-- `SRC_09`: Supreme Court of India — *Formula One World Championship Ltd vs CIT* (2017).
-- `SRC_10`: Allahabad High Court — *JPSI vs State of Uttar Pradesh* (2011 25% tax escrow).
-- `SRC_11`: Central Board of Excise and Customs (CBEC) — Customs bonding and entertainment classification.
-- `SRC_12`: Reserve Bank of India (RBI) — Annual foreign exchange reference rates.
+- `SRC_05`: Jaypee Sports International (JPSI) Disclosures & Autosport — Indian GP gate turnouts (2011: 95k Sun, 2012: 65k Sun, 2013: 60k Sun).
+- `SRC_06`: Forbes / Formula Money (Christian Sylt) — Contractual hosting fees and 5% escalation clause.
+- `SRC_07`: BookMyShow — Official tiered ticketing rate cards (₹1,500 to ₹35,000).
+- `SRC_08`: Jaiprakash Associates Ltd (JAL) — 33rd Annual Report (Note 29: Consolidated Balance Sheet capex ~₹1,850 Cr / ~$400M USD).
+- `SRC_09`: Supreme Court of India — *Formula One World Championship Ltd. vs. CIT*, [2017] 394 ITR 80 (SC) (Civil Appeal No. 3849/2017).
+- `SRC_10`: Allahabad High Court — *Jaypee Sports International Ltd. vs. State of U.P.*, Civil Misc. Writ Petition No. 1528 of 2011 (25% tax escrow).
+- `SRC_11`: Central Board of Excise and Customs & MYAS — CBEC Notification No. 153/94-Cus & sports priority classification refusal.
+- `SRC_12`: Reserve Bank of India (RBI) — Handbook of Statistics on the Indian Economy (Table 149: 46.67 $\rightarrow$ 58.60 INR/USD).
 
 ---
 
@@ -100,47 +100,55 @@ The project implements a 3-tier data architecture to prevent synthetic corruptio
 
 ### 4.2. Normality & Non-Parametric Group Differences
 - **Normality Tests:** Shapiro-Wilk testing shows that Sunday race-day attendance ($W=0.954, p=6.47 \times 10^{-6}$), winning margin ($W=0.689, p=1.12 \times 10^{-19}$), and GDP per capita ($W=0.941, p=3.91 \times 10^{-7}$) deviate significantly from normality.
-- **Kruskal-Wallis Continental Test:** $H = 76.14, p = 1.14 \times 10^{-15}$ across continents.
+- **Kruskal-Wallis Continental Test:** $H = 76.14, p = 1.14 \times 10^{-15}$ across 5 continents ($N=198$).
+  - Oceania (Melbourne, $N=10$): Median 101,500
+  - Americas (Austin, Montreal, Mexico, Brazil, $N=33$): Median 107,000
+  - Europe (Silverstone, Spa, Monza, etc., $N=85$): Median 75,000
+  - Asia (Shanghai, Suzuka, Sepang, Yeongam, BIC, $N=51$): Median 63,000
+  - Middle East (Bahrain, Abu Dhabi, $N=19$): Median 50,000
 - **Mann-Whitney U Test (Europe vs Asia):** $U = 2776.0, p = 0.0062$. European events exhibited significantly higher median attendance (75,000) than Asian rounds (63,000).
+- **Sensitivity Audit (High+Medium Confidence Only, $N=184$):** $H = 67.82, p = 6.53 \times 10^{-14}$, confirming that regional divergence is robust when opaque self-reported figures are excluded.
 
 ### 4.3. Correlation & Regression Modeling
 - **Spearman Rank Correlations:**
   - Attendance vs Event Tenure: $\rho = +0.38$ ($p = 3.8 \times 10^{-8}$)
   - Attendance vs GDP per Capita: $\rho = +0.24$ ($p = 0.0006$)
   - Speed vs Circuit Length: $\rho = +0.46$ ($p = 1.2 \times 10^{-11}$)
-  - Attendance vs Average Speed: $\rho = +0.08$ ($p = 0.262$, not significant)
+  - Attendance vs Average Speed: $\rho = +0.08$ ($p = 0.262$, not statistically significant)
 - **Multivariate OLS Regression:**
-  $$\text{Attendance} = -162,400 + 5,144 \ln(\text{GDP}) + 488 \text{Tenure} - 29,310 \mathbb{I}_{\text{Permanent}} + 655 \text{Distance}$$
+  $$\text{Attendance} = -162,400 + 5,144 \ln(\text{GDP}) + 488 \text{Tenure} - 29,310 \mathbb{I}_{\text{Permanent}} - 33,300 \mathbb{I}_{\text{Street}} + 655 \text{Distance}$$
   - $R^2 = 0.365$, Adjusted $R^2 = 0.349$, $F(5, 192) = 22.08$, $p = 1.88 \times 10^{-17}$.
-  - Both host GDP per capita ($t=2.37, p=0.019$) and event tenure ($t=6.14, p < 0.001$) are statistically significant positive drivers of crowd size.
+  - **Unit Interpretation:** $\ln(\text{GDP per Capita})$ coefficient $\beta = 5,143.6$ ($t=2.37, p=0.019$) indicates that multiplying host GDP per capita by $e \approx 2.718$ is associated with ~5,144 additional spectators (a 10% increase corresponds to $\approx 490$ additional spectators). Event tenure $\beta = 487.9$ ($t=6.14, p < 0.001$) indicates each year on the calendar adds ~488 spectators.
+- **Model Limitations:** Repeated rounds at the same circuits mean observations are not completely independent; the model measures statistical associations rather than causal mechanisms.
 
 ---
 
 ## 5. Indian Grand Prix Case Study Deep-Dive
 
 ### 5.1. Attendance Decay Dynamics
-- **2011 Debut:** 95,000 Sunday spectators (**73.7th percentile** globally, near full capacity).
-- **2012 Edition:** 65,000 Sunday spectators (**-31.58% drop**, 35.4th percentile).
-- **2013 Edition:** 60,000 Sunday spectators (**-7.69% drop**, 22.7th percentile).
+- **2011 Debut:** 95,000 Sunday spectators (**73.7th percentile** globally; higher than 146 of 198 races).
+- **2012 Edition:** 65,000 Sunday spectators (**-31.58% drop**, 35.4th percentile; higher than 70 of 198 races).
+- **2013 Edition:** 60,000 Sunday spectators (**-7.69% drop**, 22.7th percentile; higher than 45 of 198 races).
 - **Cumulative Decline:** **-36.84%** across three seasons.
 
 ### 5.2. Compounding Commercial Stress: Escalating Fees & FX Depreciation
 Under the Race Promotion Agreement, JPSI committed to a **$40.0M USD base fee escalating at 5% compounding annually**:
 - 2011: $40.0M USD @ 46.67 INR/USD = **₹186.68 Crore**
-- 2012: $42.0M USD @ 53.44 INR/USD = **₹224.45 Crore (+20.2%)**
-- 2013: $44.1M USD @ 58.60 INR/USD = **₹258.43 Crore (+38.4%)**
+- 2012: $42.0M USD @ 53.44 INR/USD = **₹224.45 Crore (+20.23%)**
+- 2013: $44.1M USD @ 58.60 INR/USD = **₹258.43 Crore (+38.44%)**
 
-While the USD contract fee grew by **+10.25%**, the **25.56% currency depreciation** of the Indian Rupee magnified the promoter's domestic currency burden by **+38.44%**.
+While the USD contract fee grew by **+10.25%**, the **25.56% currency depreciation** of the Indian Rupee magnified the promoter's domestic currency burden by **+38.44%** (+₹71.75 Crore).
 
-### 5.3. Promoter Operating Cashflow Feasibility Model
+### 5.3. Promoter Operating Cashflow Feasibility Model (Multi-Scenario Analysis)
+Illustrative financial scenarios based on published ticket tier tariffs (₹1,500 to ₹35,000) minus 25% UP Entertainment Tax escrow and 5% platform fees (Net realization factor = 0.70):
 
-| Season | Ticket Revenue ($M USD) | Contractual Fee ($M USD) | Operating Costs ($M USD) | Total Event Outlays ($M USD) | Net Operating Cashflow ($M USD) | Revenue / Fee Ratio |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **2011** | $26.5M | $40.0M | $15.0M | $55.0M | **-$28.5M** | 0.66 |
-| **2012** | $15.2M | $42.0M | $14.0M | $56.0M | **-$40.8M** | 0.36 |
-| **2013** | $11.8M | $44.1M | $13.5M | $57.6M | **-$45.8M** | 0.27 |
+| Season | Hosting Fee ($M) | Ops Logistics ($M) | Total Cost ($M) | Net Revenue: Low ($M) | Net Revenue: Central ($M) | Net Revenue: High ($M) | Deficit: Low ($M) | Deficit: Central ($M) | Deficit: High ($M) |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **2011** | $40.0M | $15.0M | $55.0M | $18.75M | $26.25M | $32.25M | **-$36.25M** | **-$28.75M** | **-$22.75M** |
+| **2012** | $42.0M | $14.0M | $56.0M | $10.48M | $15.06M | $19.65M | **-$45.52M** | **-$40.94M** | **-$36.35M** |
+| **2013** | $44.1M | $13.5M | $57.6M | $8.12M | $11.71M | $15.53M | **-$49.48M** | **-$45.89M** | **-$42.07M** |
 
-In absence of government tourism subsidies, title sponsorship retention, or broadcasting shares, the private promoter absorbed cumulative operational deficits exceeding **-$115M USD**, excluding debt service on the **~$400M circuit construction capital expenditure**.
+Under all three scenarios, net gate revenues failed to cover event costs, yielding cumulative 3-year operating deficits of **-$115.58M USD** in the central scenario, excluding debt service on the **~$400M circuit capex**.
 
 ---
 
@@ -162,7 +170,7 @@ timeline
 
 ### 6.1. Decoupling the Operational Exit from the 2017 Supreme Court Ruling
 - **Operational Exit (December 2013):** Driven by promoter financial unsustainability, currency depreciation, and customs bonding frictions.
-- **Supreme Court Judgment (April 2017):** In *Formula One World Championship Ltd vs CIT*, the Supreme Court established tax liability under Article 5(1) India-UK DTAA over royalty payments received by FOWC from JPSI. This was a retrospective judicial determination and did not cause the 2013 race exit.
+- **Supreme Court Judgment (April 2017, `SRC_09`):** In *Formula One World Championship Ltd. vs. Commissioner of Income Tax* (Civil Appeal No. 3849 of 2017, [2017] 394 ITR 80 SC), the Supreme Court affirmed that BIC was a Fixed Place PE under Article 5(1) India-UK DTAA over royalties received by FOWC. This retrospective judicial ruling occurred over three years after the race exited the calendar.
 
 ---
 
@@ -190,7 +198,7 @@ All 8 figures are exported in `reports/figures/` at 300 DPI:
 ## 9. Conclusion
 
 The demise of the Indian Grand Prix resulted from a structural convergence of:
-1. **Attendance Decay:** A rapid 36.8% decline in gate turnout following inaugural novelty.
+1. **Attendance Decay:** A 36.8% collapse in gate turnout following inaugural novelty.
 2. **Severe Commercial Squeeze:** Escalating USD hosting fees compounded by a 25.6% INR depreciation in an unsubsidized private promoter model.
 3. **Regulatory & Tax Friction:** Refusal of sporting status, customs duty bonding demands, and entertainment tax escrow orders.
 4. **Promoter Financial Distress:** Unsustainable debt leverage on the parent conglomerate (Jaiprakash Associates Ltd) amidst massive circuit capital expenditures (~$400M).

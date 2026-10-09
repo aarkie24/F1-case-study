@@ -277,21 +277,26 @@ def clean_india_gp():
     df_eng["race_day_attendance_change_pct"] = [np.nan, round((65000 - 95000) / 95000 * 100, 2), round((60000 - 65000) / 65000 * 100, 2)]
     df_eng["weekend_attendance_change_pct"] = [np.nan, round((95000 - 110000) / 110000 * 100, 2), round((65000 - 95000) / 95000 * 100, 2)]
     
-    # 4. Estimated gate revenues (weighted ticket tier models)
-    # 2011: 95k crowd, higher corporate/grandstand mix -> ~$26.5M
-    # 2012: 65k crowd, discounted picnic stand promotions -> ~$15.2M
-    # 2013: 60k crowd, lower ticket prices -> ~$11.8M
-    df_eng["estimated_ticket_revenue_usd_m"] = [26.5, 15.2, 11.8]
-    df_eng["ticket_revenue_type"] = ["Estimated (Weighted Gate Model)", "Estimated (Weighted Gate Model)", "Estimated (Weighted Gate Model)"]
+    # 4. Multi-Scenario Gate Revenue Simulation (Illustrative Financial Scenarios)
+    # Tier structure: Main Grandstand (₹25k-₹35k), Premium (₹10k-₹15k), Classic (₹5k-₹8.5k), Picnic (₹1.5k-₹2.5k)
+    # Deductions: 25% UP State Entertainment Tax escrow deposit + 5% platform/banking commission (Net factor: 0.70)
+    df_eng["net_revenue_low_usd_m"] = [18.75, 10.48, 8.12]
+    df_eng["net_revenue_central_usd_m"] = [26.25, 15.06, 11.71]
+    df_eng["net_revenue_high_usd_m"] = [32.25, 19.65, 15.53]
+    df_eng["estimated_ticket_revenue_usd_m"] = df_eng["net_revenue_central_usd_m"]
+    df_eng["ticket_revenue_type"] = ["Illustrative Scenario (Central)", "Illustrative Scenario (Central)", "Illustrative Scenario (Central)"]
     
     # 5. Estimated operating cost (event ops, safety, policing, track maintenance)
     df_eng["estimated_operating_cost_usd_m"] = [15.0, 14.0, 13.5]
     df_eng["operating_cost_type"] = ["Estimated (Industry Event Logistics)", "Estimated (Industry Event Logistics)", "Estimated (Industry Event Logistics)"]
     
-    # 6. Commercial deficit indicator
+    # 6. Commercial deficit scenarios
     df_eng["estimated_total_event_cost_usd_m"] = df_eng["hosting_fee_usd_m"] + df_eng["estimated_operating_cost_usd_m"]
-    df_eng["estimated_net_operating_cashflow_usd_m"] = (df_eng["estimated_ticket_revenue_usd_m"] - df_eng["estimated_total_event_cost_usd_m"]).round(2)
-    df_eng["revenue_to_hosting_fee_ratio"] = (df_eng["estimated_ticket_revenue_usd_m"] / df_eng["hosting_fee_usd_m"]).round(2)
+    df_eng["deficit_low_usd_m"] = (df_eng["net_revenue_low_usd_m"] - df_eng["estimated_total_event_cost_usd_m"]).round(2)
+    df_eng["deficit_central_usd_m"] = (df_eng["net_revenue_central_usd_m"] - df_eng["estimated_total_event_cost_usd_m"]).round(2)
+    df_eng["deficit_high_usd_m"] = (df_eng["net_revenue_high_usd_m"] - df_eng["estimated_total_event_cost_usd_m"]).round(2)
+    df_eng["estimated_net_operating_cashflow_usd_m"] = df_eng["deficit_central_usd_m"]
+    df_eng["revenue_to_hosting_fee_ratio"] = (df_eng["net_revenue_central_usd_m"] / df_eng["hosting_fee_usd_m"]).round(2)
     
     df_eng.to_csv("data/engineered/india_gp_engineered.csv", index=False)
     print(f"Saved data/engineered/india_gp_engineered.csv: {df_eng.shape[0]} rows, {df_eng.shape[1]} columns.")

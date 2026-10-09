@@ -63,9 +63,9 @@ def generate_figures():
     
     # Overlay India points
     india_points = [
-        (95000, 2011, '#dc2626', 'India 2011: 95,000 (87th %ile)'),
-        (65000, 2012, '#ea580c', 'India 2012: 65,000 (37th %ile)'),
-        (60000, 2013, '#b45309', 'India 2013: 60,000 (27th %ile)')
+        (95000, 2011, '#dc2626', 'India 2011: 95,000 (73.7th %ile)'),
+        (65000, 2012, '#ea580c', 'India 2012: 65,000 (35.4th %ile)'),
+        (60000, 2013, '#b45309', 'India 2013: 60,000 (22.7th %ile)')
     ]
     for val, year, col, lab in india_points:
         ax_hist.axvline(val, color=col, linestyle='-', linewidth=2, label=lab)
@@ -481,7 +481,7 @@ df_ind_eng["max_ticket_price_usd"] = (df_ind_eng["max_ticket_price_inr"] / df_in
 df_ind_eng["race_day_attendance_change_pct"] = [np.nan, -31.58, -7.69]
 df_ind_eng["weekend_attendance_change_pct"] = [np.nan, -13.64, -31.58]
 
-df_ind_eng["estimated_ticket_revenue_usd_m"] = [26.5, 15.2, 11.8]
+df_ind_eng["estimated_ticket_revenue_usd_m"] = [26.25, 15.06, 11.71]
 df_ind_eng["estimated_operating_cost_usd_m"] = [15.0, 14.0, 13.5]
 df_ind_eng["estimated_total_event_cost_usd_m"] = df_ind_eng["hosting_fee_usd_m"] + df_ind_eng["estimated_operating_cost_usd_m"]
 df_ind_eng["estimated_net_operating_cashflow_usd_m"] = (df_ind_eng["estimated_ticket_revenue_usd_m"] - df_ind_eng["estimated_total_event_cost_usd_m"]).round(2)
@@ -657,10 +657,11 @@ model = smf.ols(
 
 print(model.summary())"""),
         ('markdown', """### 5. Regression Diagnostics & Limitations
-- **$R^2$:** 0.178 (Adjusted $R^2$: 0.161). Macroeconomic and sporting factors explain a modest fraction of global attendance variance.
-- **Event Tenure:** Positive and statistically significant ($\beta \approx 362$ spectators/year of tenure, $p < 0.001$), supporting the commercial importance of historical heritage.
-- **GDP per Capita:** Positive relationship with attendance ($\beta \approx 4,874, p < 0.01$).
-- **Methodological Boundary:** This model explains baseline variation across 198 races; it cannot and should not be used to claim causal determination for the discontinuation of a specific 3-race event.""")
+- **$R^2$:** 0.365 (Adjusted $R^2$: 0.349, $F(5, 192) = 22.08, p = 1.88 \times 10^{-17}$). Macroeconomic and sporting factors explain 36.5% of global attendance variance.
+- **Log GDP per Capita:** Positive statistical association with attendance ($\beta = 5,143.6, t = 2.37, p = 0.019$). A 10% increase in host nation GDP per capita is associated with $\approx 5,143.6 \times \ln(1.10) \approx 490$ additional Sunday spectators.
+- **Event Tenure:** Positive and statistically significant ($\beta = 487.9, t = 6.14, p < 0.001$), supporting the commercial importance of historical heritage.
+- **Circuit Type:** Permanent and Street circuits have lower baseline attendance relative to Hybrid circuits ($\beta = -29,310, p < 0.001$ and $\beta = -33,300, p < 0.001$).
+- **Methodological Boundary:** This exploratory model identifies baseline associations across 198 races; observations within the same circuit over time share clustered errors, and these associations should not be interpreted as direct causal mechanisms for individual Grand Prix cancellations.""")
     ]
     create_notebook('notebooks/04_statistical_analysis.ipynb', nb04_cells)
 
@@ -783,9 +784,9 @@ ax_hist.axvline(mean_att, color='#475569', linestyle=':', linewidth=1.5, label=f
 
 # Overlay India points
 india_points = [
-    (95000, 2011, '#dc2626', 'India 2011: 95,000 (87th %ile)'),
-    (65000, 2012, '#ea580c', 'India 2012: 65,000 (37th %ile)'),
-    (60000, 2013, '#b45309', 'India 2013: 60,000 (27th %ile)')
+    (95000, 2011, '#dc2626', 'India 2011: 95,000 (73.7th %ile)'),
+    (65000, 2012, '#ea580c', 'India 2012: 65,000 (35.4th %ile)'),
+    (60000, 2013, '#b45309', 'India 2013: 60,000 (22.7th %ile)')
 ]
 for val, year, col, lab in india_points:
     ax_hist.axvline(val, color=col, linestyle='-', linewidth=2, label=lab)
