@@ -1,54 +1,153 @@
-# F1 Indian Grand Prix: Commercial Sustainability & Exploratory Data Analysis
+# 🏎️ Formula 1 & the Indian Grand Prix
+### Exploring the Commercial Sustainability of F1 Events Through Data
 
-## Project Overview
-This repository contains an Exploratory Data Analysis (EDA) and case study examining the commercial sustainability of Formula 1 events, with a focused investigation into the **2011–2013 Indian Grand Prix** held at the Buddh International Circuit (BIC) in Greater Noida, India.
+**Why did Formula 1's Indian Grand Prix last only three seasons?**
 
-The project employs a **two-tier data architecture**:
-1. **Global Baseline Dataset (2010–2019):** ~198 Formula 1 races analyzing sporting performance, circuit parameters, geographic trends, and spectator attendance.
-2. **Indian Grand Prix Deep-Dive (2011–2013):** Granular examination of gate attendance decay, ticketing structures, hosting fee burdens, capital expenditure, and operating economics.
-3. **Contextual Timeline (2007–2017):** Documented trajectory of regulatory hurdles, customs bonding, entertainment tax disputes, and the subsequent Supreme Court permanent establishment ruling.
+This project investigates the commercial sustainability of Formula 1 events, using the **2011–2013 Indian Grand Prix at Buddh International Circuit** as a focused case study.
 
----
+By combining historical Formula 1 race data, exploratory data analysis, statistical comparisons, and documented financial and regulatory context, the project aims to understand how the Indian Grand Prix compared with other F1 events and what factors may have contributed to the challenges surrounding its continuation.
 
-## Repository Structure
+The objective is not to assign a single cause to the event's discontinuation, but to distinguish what the data demonstrates from what historical and documentary evidence suggests.
+
+> **Core question:** What can historical Formula 1 data tell us about the commercial sustainability of the Indian Grand Prix?
+
+## 🎯 Research Objectives
+
+The analysis is organized around six research questions:
+
+1. **Attendance trends:** How did Indian GP attendance change between 2011 and 2013?
+2. **Global comparison:** How did attendance at the Indian GP compare with other Formula 1 events during the same period?
+3. **Event characteristics:** Which sporting, circuit, geographic, and economic characteristics are associated with attendance?
+4. **Commercial pressures:** What documented hosting fees, revenue indicators, and operating costs help explain the event's financial challenges?
+5. **Statistical anomalies:** Which races or variables exhibit unusual patterns relative to the broader F1 dataset?
+6. **Historical context:** How do the quantitative findings relate to documented taxation, contractual, and regulatory issues?
+
+## 📊 Data Strategy
+
+The project uses three complementary datasets.
+
+| Dataset | Scope | Purpose |
+|---|---|---|
+| Global F1 baseline | 2010–2019 | Compare race characteristics and identify broader patterns |
+| Indian GP deep dive | 2011–2013 | Examine attendance trends and available commercial indicators |
+| Historical context timeline | 2007–2017 | Document relevant sporting, financial, tax, and legal events |
+
+The global dataset is intended to contain approximately 190–200 race observations, subject to data availability and validation.
+
+### Data sources
+
+Potential sources include:
+
+- **Jolpica F1 API:** Historical race schedules, circuits, results, and sporting statistics.
+- **Formula 1 publications and motorsport reporting:** Historical attendance and event information.
+- **Official legal and government documents:** Taxation, regulatory, and judicial context.
+- **Historical financial reporting:** Available hosting-fee, ticketing, revenue, and cost information.
+- **World Bank and other recognized economic sources:** Country-level economic indicators where relevant.
+
+Every important value should be traceable to its source. Unavailable financial figures will remain missing rather than being presented as established facts.
+
+## 🔬 Analytical Methodology
+
+The project follows a structured data-analysis workflow.
+
+### 1. Data acquisition
+Collect historical race records, attendance figures, available financial information, and relevant documentary evidence.
+
+### 2. Data cleaning and validation
+- Inspect missing values and inconsistent records.
+- Detect duplicates and validate dataset keys.
+- Standardize units and currencies where appropriate.
+- Investigate outliers rather than removing them automatically.
+- Record source reliability and document any imputation.
+
+### 3. Exploratory data analysis
+- Descriptive statistics: mean, median, variance, and standard deviation.
+- Distribution analysis: histograms, box plots, skewness, and kurtosis.
+- Temporal analysis: season-level and Indian GP attendance trends.
+- Comparative analysis: regions, circuit types, and event tenure.
+- Relationship analysis: correlations between attendance and available explanatory variables.
+
+### 4. Statistical analysis
+Where the available data and assumptions support it, the project will investigate correlations, group differences, confidence intervals, and regression-based relationships.
+
+### 5. Indian GP case study
+Compare the three Indian races against relevant historical F1 events, then interpret the observed patterns alongside documented commercial and regulatory context.
+
+### 6. Findings and interpretation
+Connect each important finding to supporting evidence, possible explanations, alternative interpretations, and limitations.
+
+## 📈 Planned Visualizations
+
+The analysis aims to produce clear, question-driven visualizations, including:
+
+- Attendance distributions with Indian GP observations highlighted.
+- Attendance trends across the three Indian Grand Prix races.
+- Comparisons between regions and circuit types.
+- Correlation heatmaps for relevant numerical variables.
+- Multivariable plots exploring attendance and economic context.
+- A historical timeline integrating sporting, commercial, and regulatory events.
+
+Final visualizations will be added as the analysis is completed.
+
+## 🧰 Technology Stack
+
+The planned analytical workflow uses:
+
+- **Python** — Data processing and analysis.
+- **Pandas & NumPy** — Data manipulation and numerical computation.
+- **Matplotlib & Seaborn** — Data visualization.
+- **SciPy** — Statistical tests and distribution analysis.
+- **Jupyter Notebook** — Exploratory analysis and documentation.
+
+The final dependency list and execution instructions will be documented alongside the implemented notebooks and scripts.
+
+## 📁 Repository Structure
 
 ```text
-├── case_study.md                 # Project assignment guidelines and evaluation rubric
-├── plan.md                       # Master execution plan (Phases 0 to 9)
-├── README.md                     # Project overview and navigation
-│
+F1-case-study/
 ├── data/
-│   ├── raw/                      # Unaltered raw datasets
-│   │   ├── f1_races_raw.csv
-│   │   ├── india_gp_raw.csv
-│   │   └── india_gp_context_raw.csv
-│   │
-│   └── processed/                # Validated, cleaned, and normalized datasets
-│       ├── f1_races_clean.csv
-│       ├── india_gp_clean.csv
-│       ├── india_gp_context_clean.csv
-│       └── data_dictionary.md    # Schema, types, units, and validation rules
-│
-├── notebooks/                    # Analytical and computational pipeline
-│   ├── 01_data_collection.ipynb  # Phase 1: API harvesting & source compilation
-│   ├── 02_data_cleaning.ipynb    # Phase 2: Missingness, imputation & normalization
-│   ├── 03_eda.ipynb              # Phase 4: Univariate, bivariate & regional EDA
-│   ├── 04_statistical_analysis.ipynb # Phase 5: Skewness, distributions & regressions
-│   ├── 05_india_case_study.ipynb # Phase 6: India comparative deep dive
-│   └── 06_visualizations.ipynb   # Phase 7: Master publication charts
-│
-├── reports/                      # Formal academic and findings reports
-│   ├── data_quality_report.md    # Audit of missing values, outliers, and data health
-│   ├── findings.md               # Synthesis of findings, patterns, and context
-│   └── final_report.md           # Master final report mapped to grading rubric
-│
-└── sources/
-    └── source_registry.csv       # Sourcing provenance, citations, and confidence scores
+│   ├── raw/                 # Original collected datasets
+│   └── processed/           # Cleaned, validated datasets
+├── notebooks/               # Data collection, cleaning and analysis
+├── reports/                 # Data quality, findings and final report
+├── scripts/                 # Reusable processing scripts, if applicable
+├── sources/                 # Source registry and references
+├── case_study.md            # Project brief and evaluation rubric
+├── plan.md                  # Research and execution plan
+└── README.md
 ```
+
+*The directory layout and deliverables may evolve as implementation progresses.*
+
+## ⚖️ Research Integrity
+
+This project follows several analytical principles:
+
+- **Correlation is not causation.** Statistical relationships alone cannot establish why an event was discontinued.
+- **Missing data is not zero.** Unavailable historical figures will be identified explicitly.
+- **Outliers require investigation.** Unusual observations may be genuine rather than errors.
+- **Sources matter.** Important financial, attendance, and legal claims should be independently traceable.
+- **Historical chronology matters.** The last Indian GP in 2013 and the subsequent 2017 Supreme Court judgment are distinct events; the latter will not be presented as the direct cause of F1's departure.
+
+## 🚧 Project Status
+
+**Status: In progress — research design and data-analysis workflow.**
+
+The research plan defines the questions, intended datasets, analytical methods, and documentation requirements. The next milestones are to validate the collected data, complete the cleaning pipeline, perform the analysis, and publish evidence-backed findings.
+
+Results, charts, and conclusions will be added as they are verified.
+
+## 📚 Project Documentation
+
+- [Research brief and evaluation rubric](case_study.md)
+- [Master execution plan](plan.md)
+
+## 👨‍💻 About
+
+An exploratory data analysis project investigating the intersection of motorsport, economics, and historical context.
+
+The goal is to go beyond race results and use data to understand the commercial challenges behind one of India's most ambitious motorsport events.
 
 ---
 
-## Analytical Guardrails
-- **Distinction of Evidence:** Distinguishes empirical data from statistical inference and documentary legal evidence.
-- **Temporal Integrity:** Disentangles the race exit timeline (last race in 2013, dropped from 2014) from post-exit litigation (2017 Supreme Court ruling).
-- **Zero Fabrication:** Rigorous missingness logging and justified imputation.
+*This is an independent educational research project and is not affiliated with Formula 1 or the FIA.*
